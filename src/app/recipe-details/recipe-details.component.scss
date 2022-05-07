@@ -1,0 +1,21 @@
+.recipe {
+  margin: 2rem;
+
+  &__name {
+    font-size: 2rem;
+    font-family: "Dancing Script", cursive;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+li {
+  margin-left: 2rem;
+}
+
+h3 {
+  margin-top: 2rem;
+}

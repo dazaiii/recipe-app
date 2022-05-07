@@ -1,0 +1,38 @@
+.list {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+  }
+
+  &__element {
+    display: flex;
+    border-bottom: 1px solid lightblue;
+    align-items: center;
+  }
+
+  &__element-name {
+    padding: 1rem;
+    flex-grow: 3;
+    cursor: pointer;
+  }
+
+  &__button {
+    margin: 0 0.5rem;
+  }
+}
+
+input[type="text"] {
+  width: 65%;
+  padding: 0.5rem 1rem;
+  margin: 8px 0;
+  border: 1px solid lightgray;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}

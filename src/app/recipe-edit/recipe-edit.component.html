@@ -1,0 +1,88 @@
+<form [formGroup]="recipeForm" class="recipe-forms">
+  <label for="name" class="recipe-forms__labels">Name</label>
+  <input type="text" id="name" formControlName="name" placeholder="Spaghetti" />
+  <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+    <div class="recipe-forms__error" *ngIf="name?.errors?.['required'] ">
+      Name is required
+    </div>
+    <div class="recipe-forms__error" *ngIf="name?.errors?.['minlength']">
+      Name must be at least 3 characters long.
+    </div>
+    <div class="recipe-forms__error" *ngIf="name?.errors?.['maxlength'] ">
+      Name can't be longer than 80 characters.
+    </div>
+  </div>
+  <label for="preparation" class="recipe-forms__labels">Preparation time</label>
+  <input
+    type="number"
+    id="preparaion"
+    formControlName="preparation"
+    placeholder="30"
+  />
+  <div
+    *ngIf="preparation?.invalid && (preparation?.dirty || preparation?.touched)"
+  >
+    <div class="recipe-forms__error" *ngIf="preparation?.errors?.['required'] ">
+      Preparation time is required
+    </div>
+  </div>
+  <label for="description" class="recipe-forms__labels">Description</label>
+  <input
+    type="text"
+    id="description"
+    formControlName="description"
+    placeholder=" It is a staple food of traditional Italian cuisine."
+  />
+  <div
+    *ngIf="description?.invalid && (description?.dirty || description?.touched)"
+  >
+    <div class="recipe-forms__error" *ngIf="description?.errors?.['required'] ">
+      Description is required
+    </div>
+    <div class="recipe-forms__error" *ngIf="description?.errors?.['minlength']">
+      Description must be at least 15 characters long.
+    </div>
+    <div
+      class="recipe-forms__error"
+      *ngIf="description?.errors?.['maxlength'] "
+    >
+      Description can't be longer than 255 characters.
+    </div>
+  </div>
+  <div formArrayName="ingredients">
+    <ng-container *ngFor="let ingredient of ingredientsControls; let i = index">
+      <div [formGroup]="ingredient" class="ingredients-form">
+        <div class="ingredients-form__input-with-label">
+          <label for="ingredientName" class="recipe-forms__labels"
+            >Ingredient name</label
+          >
+          <input id="ingredientName" type="text" formControlName="name" />
+        </div>
+        <div class="ingredients-form__input-with-label">
+          <label for="ingredientQuantity" class="recipe-forms__labels"
+            >Ingredient quantity</label
+          >
+          <input
+            id="ingredientQuantity"
+            type="text"
+            formControlName="quantity"
+          />
+        </div>
+        <div>
+          <button (click)="deleteIngredient(i)">Delete ingredient</button>
+        </div>
+      </div>
+    </ng-container>
+    <button (click)="addIngredient()">Add ingredient</button>
+    <div
+      class="recipe-forms__error"
+      *ngIf="ingredients.hasError('minLengthArray')"
+    >
+      Recipe should have at least 2 ingredients.
+    </div>
+  </div>
+  <div>
+    <button (click)="submit()">Save</button>
+    <button (click)="cancel()">Cancel</button>
+  </div>
+</form>

@@ -1,0 +1,20 @@
+<div class="list">
+  <div class="list__header">
+    <input
+      [formControl]="searchForm"
+      type="text"
+      placeholder="Search..."
+      name="search"
+    />
+    <div><button [routerLink]="['/recipes/add']">Add</button></div>
+  </div>
+  <div class="list__element" *ngFor="let recipe of filteredRecipes">
+    <span class="list__element-name" [routerLink]="['/recipes', recipe._id]">{{
+      recipe.name
+    }}</span>
+    <button class="list__button" (click)="openDialog()">Delete</button>
+    <button class="list__button" [routerLink]="['/recipes/edit', recipe._id]">
+      Edit
+    </button>
+  </div>
+</div>

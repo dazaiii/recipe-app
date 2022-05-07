@@ -1,0 +1,18 @@
+.app-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 90vh;
+  column-gap: 1rem;
+}
+
+.recipe-list {
+  border: 0.1rem solid lightblue;
+  border-radius: 1rem;
+  margin: 1rem;
+}
+
+.recipe-details {
+  border: 0.1rem solid lightblue;
+  border-radius: 1rem;
+  margin: 1rem;
+}
