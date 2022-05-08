@@ -1,3 +1,5 @@
+@import "../../importable/colors.scss";
+
 .recipe-forms {
   display: flex;
   flex-direction: column;
@@ -15,7 +17,7 @@
   }
 
   &__error {
-    color: red;
+    color: $red;
   }
 }
 
@@ -34,8 +36,8 @@
 input[type="text"],
 input[type="number"] {
   width: 60%;
-  background-color: rgb(231, 228, 228);
-  color: black;
+  background-color: $lightgray2;
+  color: $black;
   padding: 1rem 1.2rem;
   margin: 8px 0;
   border: none;

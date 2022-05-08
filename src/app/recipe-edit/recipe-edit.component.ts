@@ -1,30 +1,23 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  Input,
+  EventEmitter,
   OnInit,
+  Output,
 } from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
-export function minLengthArray(min: number): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (control.value.length >= min) {
-      return null;
-    }
-    return { minLengthArray: { valid: false } };
-  };
-}
+import { Recipe } from 'src/models/recipe.model';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -39,7 +32,7 @@ export class RecipeEditComponent implements OnInit {
       Validators.minLength(3),
       Validators.maxLength(80),
     ]),
-    preparation: new FormControl('', [
+    preparationTimeInMinutes: new FormControl('', [
       Validators.required,
       Validators.pattern('^[0-9]*$'),
     ]),
@@ -48,19 +41,21 @@ export class RecipeEditComponent implements OnInit {
       Validators.minLength(15),
       Validators.maxLength(255),
     ]),
-    ingredients: new FormArray([], minLengthArray(2)),
+    ingredients: new FormArray([], [Validators.minLength(2)]),
   });
 
   routeSub: Subscription = new Subscription();
 
-  defaultIngredientsNumber: number = 2;
+  defaultIngredientsAmount: number = 2;
+
+  recipe: Recipe | undefined;
 
   get name() {
     return this.recipeForm.get('name');
   }
 
-  get preparation() {
-    return this.recipeForm.get('preparation');
+  get preparationTimeInMinutes() {
+    return this.recipeForm.get('preparationTimeInMinutes');
   }
 
   get description() {
@@ -76,42 +71,86 @@ export class RecipeEditComponent implements OnInit {
     return array.controls as FormGroup[];
   }
 
-  get ingredientName() {
-    return this.recipeForm.get('ingredients.name');
-  }
-
-  get quantityName() {
-    return this.recipeForm.get('ingredients.quantity');
-  }
-
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {}
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private recipeService: RecipeService,
+    private changeDetector: ChangeDetectorRef,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.routeSub = this.route.params.subscribe((params) => {
-      console.log(params['id']);
-    });
-    this.addIngredient();
-    this.addIngredient();
+    if (this.router.url.includes('edit')) {
+      this.routeSub = this.route.params.subscribe((params) => {
+        this.getRecipeById(params['id']);
+      });
+    } else if (this.router.url.includes('add')) {
+      this.addMinimumIngredients();
+    }
   }
 
   submit(): void {
-    if (this.ingredients.hasError('minLengthArray')) {
-      console.log('error');
+    if (this.router.url.includes('add')) {
+      this.addRecipe(this.recipeForm.value);
+    } else if (this.router.url.includes('edit')) {
+      if (this.recipe) {
+        this.editRecipe(this.recipeForm.value, this.recipe._id);
+      }
     }
-    console.log(this.recipeForm.value);
+    this.cancel();
+    this.recipeService.update = true;
   }
 
-  cancel(): void {}
+  cancel(): void {
+    this.recipeForm.reset();
+    this.ingredients.clear();
+    this.addMinimumIngredients();
+  }
 
-  addIngredient() {
+  addIngredient(name?: string, quantity?: string): void {
     const ingredientForm = this.fb.group({
-      name: new FormControl(''),
-      quantity: new FormControl(''),
+      name: new FormControl(name ? name : '', [Validators.required]),
+      quantity: new FormControl(quantity ? quantity : '', [
+        Validators.required,
+      ]),
     });
     this.ingredients.push(ingredientForm);
   }
 
-  deleteIngredient(index: number) {
+  deleteIngredient(index: number): void {
     this.ingredients.removeAt(index);
+  }
+
+  addMinimumIngredients(): void {
+    for (let i = 0; i < this.defaultIngredientsAmount; i += 1) {
+      this.addIngredient();
+    }
+  }
+
+  getRecipeById(_id: string): void {
+    this.recipeService.getRecipeById(_id).subscribe((recipe) => {
+      this.recipe = recipe;
+      this.name?.reset(recipe.name);
+      this.description?.reset(recipe.description);
+      this.preparationTimeInMinutes?.reset(recipe.preparationTimeInMinutes);
+      this.ingredients.reset([]);
+      recipe.ingredients.forEach((ingredient) => {
+        this.addIngredient(ingredient.name, ingredient.quantity);
+      });
+      this.changeDetector.detectChanges();
+    });
+  }
+
+  addRecipe(recipe: Recipe): void {
+    this.recipeService
+      .addRecipe(recipe)
+      .subscribe(() => this.snackBar.open('Success', 'Close'));
+  }
+
+  editRecipe(recipe: Recipe, _id: string): void {
+    this.recipeService
+      .editRecipe(recipe, _id)
+      .subscribe(() => this.snackBar.open('Success', 'Close'));
   }
 }

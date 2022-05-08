@@ -1,14 +1,18 @@
+@import "../../importable/colors.scss";
+
 .navbar {
   display: flex;
   padding: 2vh;
   justify-content: space-between;
-  background-color: lightblue;
+  background-color: $lightblue;
 
   &__title {
     font-weight: 600;
     font-size: 2.5rem;
     font-family: "Dancing Script", cursive;
     margin-left: 1rem;
+    user-select: none;
+    cursor: pointer;
   }
 
   &__author-info {

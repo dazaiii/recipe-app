@@ -8,11 +8,13 @@
     />
     <div><button [routerLink]="['/recipes/add']">Add</button></div>
   </div>
-  <div class="list__element" *ngFor="let recipe of filteredRecipes">
+  <div class="list__element" *ngFor="let recipe of recipesEmitter$ | async">
     <span class="list__element-name" [routerLink]="['/recipes', recipe._id]">{{
       recipe.name
     }}</span>
-    <button class="list__button" (click)="openDialog()">Delete</button>
+    <button class="list__button" (click)="openDialog(recipe._id)">
+      Delete
+    </button>
     <button class="list__button" [routerLink]="['/recipes/edit', recipe._id]">
       Edit
     </button>

@@ -1,3 +1,5 @@
+@import "../../importable/colors.scss";
+
 .list {
   display: flex;
   flex-direction: column;
@@ -13,7 +15,7 @@
 
   &__element {
     display: flex;
-    border-bottom: 1px solid lightblue;
+    border-bottom: 1px solid $lightblue;
     align-items: center;
   }
 
@@ -32,7 +34,7 @@ input[type="text"] {
   width: 65%;
   padding: 0.5rem 1rem;
   margin: 8px 0;
-  border: 1px solid lightgray;
+  border: 1px solid $lightgray;
   border-radius: 0.2rem;
   cursor: pointer;
 }

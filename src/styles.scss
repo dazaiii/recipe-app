@@ -1,3 +1,5 @@
+@import "importable/colors.scss";
+
 html,
 body {
   height: 100%;
@@ -8,9 +10,9 @@ body {
 }
 
 button {
-  background-color: rgb(131, 197, 219);
-  color: white;
-  border: 0.1rem solid rgb(59, 175, 213);
+  background-color: $lighblue2;
+  color: $white;
+  border: 0.1rem solid $blue;
   padding: 0.2rem 0.5rem;
   border-radius: 5%;
   text-align: center;
@@ -19,5 +21,11 @@ button {
 }
 
 button:hover {
-  background-color: rgb(59, 175, 213);
+  background-color: $blue;
+}
+
+button:disabled {
+  border: 0.1rem solid $gray;
+  background-color: $gray2;
+  color: $gray3;
 }

@@ -1,4 +1,4 @@
-<div class="recipe">
+<div class="recipe" *ngIf="recipe">
   <div class="recipe__buttons">
     <button (click)="openDialog()">Delete</button>
     <button [routerLink]="['/recipes/edit', recipe._id]">Edit</button>

@@ -1,3 +1,5 @@
+@import "../importable/colors.scss";
+
 .app-content {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -6,13 +8,13 @@
 }
 
 .recipe-list {
-  border: 0.1rem solid lightblue;
+  border: 0.1rem solid $lightblue;
   border-radius: 1rem;
   margin: 1rem;
 }
 
 .recipe-details {
-  border: 0.1rem solid lightblue;
+  border: 0.1rem solid $lightblue;
   border-radius: 1rem;
   margin: 1rem;
 }

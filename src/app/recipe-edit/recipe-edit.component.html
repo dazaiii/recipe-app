@@ -16,13 +16,19 @@
   <input
     type="number"
     id="preparaion"
-    formControlName="preparation"
+    formControlName="preparationTimeInMinutes"
     placeholder="30"
   />
   <div
-    *ngIf="preparation?.invalid && (preparation?.dirty || preparation?.touched)"
+    *ngIf="
+      preparationTimeInMinutes?.invalid &&
+      (preparationTimeInMinutes?.dirty || preparationTimeInMinutes?.touched)
+    "
   >
-    <div class="recipe-forms__error" *ngIf="preparation?.errors?.['required'] ">
+    <div
+      class="recipe-forms__error"
+      *ngIf="preparationTimeInMinutes?.errors?.['required'] "
+    >
       Preparation time is required
     </div>
   </div>
@@ -75,14 +81,25 @@
     </ng-container>
     <button (click)="addIngredient()">Add ingredient</button>
     <div
-      class="recipe-forms__error"
-      *ngIf="ingredients.hasError('minLengthArray')"
+      *ngIf="
+        ingredients?.invalid && (ingredients?.dirty || ingredients?.touched)
+      "
     >
-      Recipe should have at least 2 ingredients.
+      <div
+        class="recipe-forms__error"
+        *ngIf="ingredients.hasError('minlength')"
+      >
+        Recipe should have at least 2 ingredients.
+      </div>
     </div>
   </div>
   <div>
-    <button (click)="submit()">Save</button>
+    <button
+      [disabled]="recipeForm.invalid || ingredients.invalid"
+      (click)="submit()"
+    >
+      Save
+    </button>
     <button (click)="cancel()">Cancel</button>
   </div>
 </form>
